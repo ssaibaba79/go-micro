@@ -1,4 +1,4 @@
-module book-store
+module accounts
 
 go 1.21.6
 
