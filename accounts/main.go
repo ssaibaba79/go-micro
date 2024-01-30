@@ -49,4 +49,3 @@ func initializeRequestHandlers(r *mux.Router) {
 	accountsRouter.HandleFunc("/{id}", accountsHandler.UpdateAccount).
 		Methods(http.MethodPut)
 }
-c
