@@ -2,7 +2,10 @@ package data
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
+
+	"github.com/beevik/guid"
 )
 
 // Account definition
@@ -21,12 +24,48 @@ func (a *Account) FromJson(r io.Reader) error {
 	return d.Decode(a)
 }
 
+func (a *Account) ToJson(w io.Writer) error {
+	e := json.NewEncoder(w)
+	return e.Encode(a)
+}
+
+func (a *Account) copyFrom(in Account) {
+	a.FirstName = in.FirstName
+	a.MiddleName = in.MiddleName
+	a.LastName = in.LastName
+	a.Gender = in.Gender
+}
+
+// Fetch all accounts
 func GetAccounts() Accounts {
 	return accounts
 }
 
-func AddAccount() {
+// Get Account by Id
+func GetAccount(id string) *Account {
+	for _, acct := range accounts {
+		if acct.ID == id {
+			return acct
+		}
+	}
+	return nil
+}
 
+// Add a new account
+func AddAccount(newAccount *Account) {
+	id := guid.New()
+	newAccount.ID = id.String()
+	accounts = append(accounts, newAccount)
+}
+
+// Update an account
+func UpdateAccount(id string, account *Account) (*Account, error) {
+	savedAccount := GetAccount(id)
+	if savedAccount == nil {
+		return nil, errors.New("Account with id " + id + " not found")
+	}
+	savedAccount.copyFrom(*account)
+	return savedAccount, nil
 }
 
 // Serialize to Json

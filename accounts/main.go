@@ -39,6 +39,14 @@ func main() {
 // Initialize request handlers
 func initializeRequestHandlers(r *mux.Router) {
 	accountsRouter := r.PathPrefix("/accounts").Subrouter()
-	accountsRouter.HandleFunc("", handlers.NewAccountsHandler(l).GetAccounts).
+	accountsHandler := handlers.NewAccountsHandler(l)
+	accountsRouter.HandleFunc("", accountsHandler.GetAccounts).
 		Methods(http.MethodGet)
+	accountsRouter.HandleFunc("", accountsHandler.AddAccount).
+		Methods(http.MethodPost)
+	accountsRouter.HandleFunc("/{id}", accountsHandler.GetAccountWithId).
+		Methods(http.MethodGet)
+	accountsRouter.HandleFunc("/{id}", accountsHandler.UpdateAccount).
+		Methods(http.MethodPut)
 }
+c
