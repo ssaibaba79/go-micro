@@ -11,11 +11,11 @@ import (
 // Account definition
 type Account struct {
 	ID          string `json:"id"`
-	Username    string `json:"username"`
-	FirstName   string `json:"firstname"`
+	Username    string `json:"username" validate:"required"`
+	FirstName   string `json:"firstname" validate:"required"`
 	MiddleName  string `json:"middlename"`
-	LastName    string `json:"lastname"`
-	Gender      string `json:"gender"`
+	LastName    string `json:"lastname" validate:"required"`
+	Gender      string `json:"gender" validate:"required"`
 	CreatedDate string `json:"-"`
 }
 

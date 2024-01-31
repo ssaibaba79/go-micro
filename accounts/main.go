@@ -43,9 +43,11 @@ func initializeRequestHandlers(r *mux.Router) {
 	accountsRouter.HandleFunc("", accountsHandler.GetAccounts).
 		Methods(http.MethodGet)
 	accountsRouter.HandleFunc("", accountsHandler.AddAccount).
-		Methods(http.MethodPost)
+		Methods(http.MethodPost).
+		Headers("Content-Type", "application/json")
 	accountsRouter.HandleFunc("/{id}", accountsHandler.GetAccountWithId).
 		Methods(http.MethodGet)
 	accountsRouter.HandleFunc("/{id}", accountsHandler.UpdateAccount).
-		Methods(http.MethodPut)
+		Methods(http.MethodPut).
+		Headers("Content-Type", "application/json")
 }
