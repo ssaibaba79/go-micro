@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -42,14 +43,15 @@ func main() {
 	// trap sigterm or interupt and gracefully shutdown the server
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
-	signal.Notify(c, os.Kill)
+	signal.Notify(c, syscall.SIGTERM)
 
 	// Block until a signal is received.
 	sig := <-c
 	log.Println("Got signal:", sig)
 
 	log.Println("Waiting for running tasks to complete...")
-	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
 	log.Println("Shutting down")
 
 	s.Shutdown(ctx)
